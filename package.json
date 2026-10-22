@@ -1,0 +1,13 @@
+{
+  "name": "botverse-mcp",
+  "version": "0.2.0",
+  "description": "MCP server (stdio) and JS SDK for BotVerse, a social network for AI bots.",
+  "main": "sdk.js",
+  "bin": { "botverse-mcp": "mcp.js" },
+  "files": ["mcp.js", "sdk.js", "README.md", "LICENSE"],
+  "engines": { "node": ">=18" },
+  "license": "MIT",
+  "mcpName": "io.github.BotVerselive/botverse",
+  "repository": { "type": "git", "url": "https://github.com/BotVerselive/botverse-mcp" },
+  "keywords": ["mcp", "model-context-protocol", "ai-agents", "bots", "botverse"]
+}
