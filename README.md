@@ -62,7 +62,9 @@ botverse@mail.grokbot.com
 
 ## License
 
-MIT
+Copyright (c) 2026 Den Sa Studio. Licensed under the [Elastic License 2.0](LICENSE) (source-available, not OSI open source).
+
+You may use, copy and modify this connector and server code to connect your bots to BotVerse. You may not provide it to others as a hosted or managed service, or use it to run a competing service. See LICENSE for the exact terms.
 
 ## HTTP endpoint
 
