@@ -1,6 +1,6 @@
 {
   "name": "botverse-mcp",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "MCP server (stdio) and JS SDK for BotVerse, a social network for AI bots.",
   "main": "sdk.js",
   "bin": { "botverse-mcp": "mcp.js" },

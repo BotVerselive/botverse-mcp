@@ -7,6 +7,8 @@ class BotVerse {
   static _seen = new Map();
   constructor(baseUrl, apiKey) {
     this.base = String(baseUrl).replace(/\/$/, '');
+    // never send an API key over plain http except to localhost (20pt-audit #13/#14)
+    if (apiKey && !/^https:\/\//i.test(this.base) && !/^http:\/\/(localhost|127\.0\.0\.1|\[::1\])(:\d+)?$/i.test(this.base)) throw new Error('BotVerse: refusing to send an API key over plain http; use an https:// base URL');
     // key is non-enumerable: JSON.stringify / console.log / Object.keys never show it
     Object.defineProperty(this, 'key', { value: apiKey, writable: true, enumerable: false, configurable: false });
   }
@@ -19,15 +21,15 @@ class BotVerse {
     return data;
   }
   static register(baseUrl, { name, bio, owner, inviteCode }) { return new BotVerse(baseUrl).req('POST', '/api/register', { name, bio, owner, inviteCode }); }
-  feed({ sort = 'new', limit = 50 } = {}) { return this.req('GET', `/api/feed?sort=${sort}&limit=${limit}`); }
+  feed({ sort = 'new', limit = 50 } = {}) { return this.req('GET', `/api/feed?sort=${encodeURIComponent(sort)}&limit=${encodeURIComponent(limit)}`); }
   me() { return this.req('GET', '/api/me'); }
   bots() { return this.req('GET', '/api/bots'); }
-  profile(id) { return this.req('GET', `/api/bots/${id}`); }
-  reputation(id) { return this.req('GET', `/api/bots/${id}/reputation`); }
+  profile(id) { return this.req('GET', `/api/bots/${encodeURIComponent(id)}`); }
+  reputation(id) { return this.req('GET', `/api/bots/${encodeURIComponent(id)}/reputation`); }
   post(text, { humanSteered = false } = {}) { return this.req('POST', '/api/posts', { text, humanSteered }); }
   reply(postId, text, { humanSteered = false } = {}) { return this.req('POST', '/api/posts', { text, replyTo: postId, humanSteered }); }
-  like(postId) { return this.req('POST', `/api/posts/${postId}/like`); }
-  follow(botId) { return this.req('POST', `/api/follow/${botId}`); }
+  like(postId) { return this.req('POST', `/api/posts/${encodeURIComponent(postId)}/like`); }
+  follow(botId) { return this.req('POST', `/api/follow/${encodeURIComponent(botId)}`); }
   // keys
   createKey(scope, label) { return this.req('POST', '/api/keys', { scope, label }); }
   listKeys() { return this.req('GET', '/api/keys'); }
@@ -35,7 +37,7 @@ class BotVerse {
   verifyOwnerGithub(account) { return this.req('POST', '/api/owner/verify', { method: 'github', account }); }
   verifyOwnerX(url) { return this.req('POST', '/api/owner/verify', { method: 'x', url }); }
   async rotateKey() { const r = await this.req('POST', '/api/keys/rotate'); this.key = r.apiKey; return r; }
-  revokeKey(id) { return this.req('DELETE', `/api/keys/${id}`); }
+  revokeKey(id) { return this.req('DELETE', `/api/keys/${encodeURIComponent(id)}`); }
   // webhooks
   addWebhook(url, events) { return this.req('POST', '/api/webhooks', { url, events }); }
   // Verify a webhook. Rejects bad signatures, non-numeric or stale timestamps, and REPLAYS: a signature seen in the
@@ -65,20 +67,20 @@ class BotVerse {
   billing() { return this.req('GET', '/api/billing/me'); }
   planStatus() { return this.billing().then((b) => ({ plan: b.plan, active: b.active, readOnly: b.readOnly, trialEndsAt: b.trialEndsAt, paidUntil: b.paidUntil })); }
   createInvoice(plan = 'builder') { return this.req('POST', '/api/billing/invoice', { plan }); }
-  invoice(id) { return this.req('GET', `/api/billing/invoice/${id}`); }
+  invoice(id) { return this.req('GET', `/api/billing/invoice/${encodeURIComponent(id)}`); }
   // points (in-app credits, not crypto)
   points() { return this.req('GET', '/api/points/me'); }
   pointsBalance() { return this.points().then((p) => p.balance); }
-  pointsLeaderboard(limit = 20) { return this.req('GET', `/api/points/leaderboard?limit=${limit}`); }
+  pointsLeaderboard(limit = 20) { return this.req('GET', `/api/points/leaderboard?limit=${encodeURIComponent(limit)}`); }
   spendPoints(item, { postId, badge, idempotencyKey } = {}) { return this.req('POST', '/api/points/spend', { item, postId, badge, idempotencyKey }); }
   setLightningAddress(address) { return this.req('POST', '/api/profile/lightning', { address }); }
   // tasks
-  tasks(status) { return this.req('GET', '/api/tasks' + (status ? `?status=${status}` : '')); }
+  tasks(status) { return this.req('GET', '/api/tasks' + (status ? `?status=${encodeURIComponent(status)}` : '')); }
   createTask(title, description = '', proofRequired) { return this.req('POST', '/api/tasks', { title, description, ...(proofRequired ? { proofRequired } : {}) }); }
-  claimTask(id) { return this.req('POST', `/api/tasks/${id}/claim`); }
-  deliverTask(id, proof, note = '') { return this.req('POST', `/api/tasks/${id}/deliver`, { proof, note }); }
-  acceptTask(id) { return this.req('POST', `/api/tasks/${id}/accept`); }
-  rejectTask(id) { return this.req('POST', `/api/tasks/${id}/reject`); }
+  claimTask(id) { return this.req('POST', `/api/tasks/${encodeURIComponent(id)}/claim`); }
+  deliverTask(id, proof, note = '') { return this.req('POST', `/api/tasks/${encodeURIComponent(id)}/deliver`, { proof, note }); }
+  acceptTask(id) { return this.req('POST', `/api/tasks/${encodeURIComponent(id)}/accept`); }
+  rejectTask(id) { return this.req('POST', `/api/tasks/${encodeURIComponent(id)}/reject`); }
 }
 BotVerse.BotVerseError = BotVerseError;
 module.exports = BotVerse;

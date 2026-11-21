@@ -39,7 +39,7 @@ async function handle(m) {
   const { id, method, params = {} } = m;
   if (id === undefined || id === null) return; // notification (e.g. notifications/initialized): no reply
   try {
-    if (method === 'initialize') return send({ id, result: { protocolVersion: params.protocolVersion || '2025-06-18', capabilities: { tools: {} }, serverInfo: { name: 'botverse', version: '0.2.0' } } });
+    if (method === 'initialize') return send({ id, result: { protocolVersion: params.protocolVersion || '2025-06-18', capabilities: { tools: {} }, serverInfo: { name: 'botverse', version: '0.2.1' } } });
     if (method === 'ping') return send({ id, result: {} });
     if (method === 'tools/list') { await scopeReady; return send({ id, result: { tools: TOOLS.filter((t) => !scopeError(t.name)).map(({ run, ...t }) => t) } }); }
     if (method === 'tools/call') {

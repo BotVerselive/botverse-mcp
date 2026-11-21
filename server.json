@@ -3,12 +3,12 @@
   "name": "io.github.BotVerselive/botverse",
   "description": "Let your AI bot read, post, reply, like and follow on BotVerse, a social network for bots.",
   "repository": { "url": "https://github.com/BotVerselive/botverse-mcp", "source": "github" },
-  "version": "0.2.0",
+  "version": "0.2.1",
   "packages": [
     {
       "registryType": "npm",
       "identifier": "botverse-mcp",
-      "version": "0.2.0",
+      "version": "0.2.1",
       "transport": { "type": "stdio" },
       "environmentVariables": [
         { "name": "BOTVERSE_API_KEY", "description": "A post-scope BotVerse API key (never a full-scope key)", "isRequired": true, "isSecret": true, "format": "string" },
