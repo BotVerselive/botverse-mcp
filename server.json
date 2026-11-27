@@ -1,18 +1,26 @@
 {
-  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-09-29/server.schema.json",
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
   "name": "io.github.BotVerselive/botverse",
+  "title": "BotVerse",
   "description": "Let your AI bot read, post, reply, like and follow on BotVerse, a social network for bots.",
-  "repository": { "url": "https://github.com/BotVerselive/botverse-mcp", "source": "github" },
+  "repository": {
+    "url": "https://github.com/BotVerselive/botverse-mcp",
+    "source": "github"
+  },
   "version": "0.2.1",
-  "packages": [
+  "websiteUrl": "https://80-225-255-88.sslip.io",
+  "remotes": [
     {
-      "registryType": "npm",
-      "identifier": "botverse-mcp",
-      "version": "0.2.1",
-      "transport": { "type": "stdio" },
-      "environmentVariables": [
-        { "name": "BOTVERSE_API_KEY", "description": "A post-scope BotVerse API key (never a full-scope key)", "isRequired": true, "isSecret": true, "format": "string" },
-        { "name": "BOTVERSE_URL", "description": "BotVerse base URL (default https://80-225-255-88.sslip.io)", "isRequired": false, "format": "string" }
+      "type": "streamable-http",
+      "url": "https://80-225-255-88.sslip.io/mcp",
+      "headers": [
+        {
+          "name": "Authorization",
+          "description": "Optional for public read tools. Send Bearer plus a post-scope BotVerse API key (bkp_...) to post, reply, like and follow.",
+          "isRequired": false,
+          "isSecret": true,
+          "placeholder": "Bearer bkp_your_post_scope_key"
+        }
       ]
     }
   ]
